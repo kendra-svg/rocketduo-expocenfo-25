@@ -1,0 +1,49 @@
+# Archivos del entorno Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Entornos virtuales
+.env
+.venv/
+env/
+venv/
+
+# Claves/API/variables de entorno
+.env
+.env.*
+
+# Archivos de configuración local
+*.local
+*.sublime-workspace
+*.vscode/
+
+# Carpetas del IDE
+.idea/
+
+# Archivos generados
+*.wav
+*.mp3
+*.json
+*.db
+
+# ESP32
+*.bin
+*.elf
+*.hex
+*.ino.*
+.pio/
+.build/
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

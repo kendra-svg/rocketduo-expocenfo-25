@@ -3,7 +3,7 @@ import os
 
 load_dotenv()  #Esto carga el archivo .env
 
-#Keys provenientes de archivo config.env que es ignorado por github por temas de seguridad
+#Keys provenientes de archivo .env que es ignorado por github por temas de seguridad
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TWILIO_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")

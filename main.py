@@ -9,7 +9,6 @@ Descripción: API REST con dos rutas:
  - POST /evento: recibe eventos del ESP32 (como presionar un botón).
 """
 
-
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -20,9 +19,9 @@ def obtener_configuracion():
 
 
     configuracion_mock = {
-        umbral : 50,
-        modo: automatico,
-        frecuencia_actualizacion: 5
+        "umbral" : 50,
+        "modo": "automatico",
+        "frecuencia_actualizacion": 5
     }
     return jsonify(configuracion_mock), 200
 

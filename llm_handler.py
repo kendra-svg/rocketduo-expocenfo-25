@@ -29,7 +29,7 @@ Ejemplo de salida JSON:
 
 frase = "Mi abuela toma enapril a las 8:00 am."
 
-def frase_a_json():
+def frase_a_json(frase):
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -44,4 +44,4 @@ def frase_a_json():
     except Exception as ex:
         return {"error": str(ex)}
 
-print(frase_a_json())
+print(frase_a_json(frase))

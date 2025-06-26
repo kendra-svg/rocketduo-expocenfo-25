@@ -8,8 +8,11 @@ Descripción: API REST con dos rutas:
  - GET /configuracion: devuelve datos simulados de configuración.
  - POST /evento: recibe eventos del ESP32 (como presionar un botón).
 """
+import json
 
 from flask import Flask, request, jsonify
+from llm_handler import frase_a_json
+from tts_generator import generar_audio
 
 app = Flask(__name__)
 
@@ -51,6 +54,19 @@ def recibir_evento():
     datos = request.json
     print("Evento recibido:", datos)
     return jsonify({"mensaje": "Evento recibido correctamente"}), 201
+
+
+@app.route('/frase', methods=['POST']) #Al ser de tipo post, no se puede acceder a /frase desde el navegador
+def procesar_frase():
+    datos = request.json
+    frase = datos.get("frase")
+
+    json_str = frase_a_json(frase)
+    datos_json = json.loads(json_str)
+
+    generar_audio(datos_json["mensaje"], datos_json["audio_filename"])
+
+    return jsonify(datos_json)
 
 # Iniciar el servidor
 if __name__ == '__main__':

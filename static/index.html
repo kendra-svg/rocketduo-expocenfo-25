@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Asistente de Medicación</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #chat {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      background: #fff;
+      margin-bottom: 15px;
+    }
+    .message {
+      margin: 8px 0;
+    }
+    .user {
+      text-align: right;
+      color: #2c3e50;
+    }
+    .bot {
+      text-align: left;
+      color: #27ae60;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Asistente de Medicación</h2>
+  <div id="chat"></div>
+  <input type="text" id="userInput" placeholder="Ej. Mi abuela toma aspirina a las 6 p.m.">
+  <button onclick="sendMessage()">Enviar</button>
+
+  <script>
+    //funcion que envia el userInput del UI al backend para que el modelo de gpt devuelva
+    // una respuesta en formato json y seguidamente se pueda utilizar para la generacion
+    // de audio con tts generator
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value;
+      if (!text) return;
+
+      appendMessage(text, 'user');
+      input.value = '';
+
+      //muestra al usuario un mensaje mientras se genera la respuesta del backend
+       const waitDiv = appendMessage('Generando audio, por favor espere...', 'bot', true);
+       await new Promise(r => setTimeout(r));
+
+      try {
+        const res = await fetch('http://localhost:5000/frase', { //se conecta al backend, posible gracias CORS
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ frase: text })
+        });
+
+        //muestra la respuesta del modelo
+        const data = await res.json();
+        waitDiv.innerHTML = `Audio configurado correctamente:<br>` +
+    `${data.mensaje}<br>` +
+    `Medicamento: ${data.medicamento}<br>` +
+    `Hora: ${data.hora}<br>` +
+    `Archivo generado: ${data.audio_filename}`;
+      } catch (err) {
+       waitDiv.innerHTML = `Error al comunicarse con el servidor.`;
+      }
+    }
+
+    //funcion para mostrar al usurio el mensaje
+    function appendMessage(message, sender, returnElement = false) {
+      const chat = document.getElementById('chat');
+      const div = document.createElement('div');
+      div.className = 'message ' + sender;
+      div.innerHTML = message;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+       if (returnElement) return div;
+    }
+  </script>
+</body>
+</html>

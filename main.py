@@ -13,8 +13,10 @@ import json
 from flask import Flask, request, jsonify
 from llm_handler import frase_a_json
 from tts_generator import generar_audio
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) #Permite accesar al puerto 5000/frase desde el puerto de origen 63342
 
 # Ruta GET /configuracion con datos mockeados
 @app.route('/configuracion', methods=['GET'])

@@ -27,7 +27,7 @@ Ejemplo de salida JSON:
 }
 """
 
-frase = "Mi abuela toma enapril a las 8:00 am."
+
 
 def frase_a_json(frase):
     try:
@@ -44,4 +44,4 @@ def frase_a_json(frase):
     except Exception as ex:
         return {"error": str(ex)}
 
-print(frase_a_json(frase))
+

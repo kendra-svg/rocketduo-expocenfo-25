@@ -154,3 +154,25 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
    Si se presiona alguno de los botones físicos (rojo, azul o amarillo), el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
 
 ## Componentes ESP32
+
+### eventos.botones.py
+
+Este módulo define una ruta de la API Flask para manejar eventos enviados por el ESP32,
+particularmente los eventos relacionados con la pulsación de botones.
+
+Ruta implementada:
+- POST /evento
+
+Funcionalidad:
+- Recibe un JSON con un campo "color".
+- Verifica que el color sea uno de los valores esperados: "rojo", "azul" o "amarillo".
+- Llama a la función `enviar_sms()` del módulo `twilio_handler.py`, enviando un mensaje específico según el color recibido.
+- Responde con un mensaje de confirmación o un error si el color no es reconocido.
+
+Ejemplo de petición válida (JSON):
+{
+    "color": "rojo"
+}
+
+Autor: Steven Delgadillo
+Fecha: Julio 2025

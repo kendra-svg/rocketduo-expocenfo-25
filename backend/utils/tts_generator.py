@@ -1,6 +1,6 @@
 import requests
 import os
-from config import AZURE_SPEECH_KEY
+from config.config import AZURE_SPEECH_KEY
 
 def generar_audio(texto, nombre_archivo):
     region = "eastus2"

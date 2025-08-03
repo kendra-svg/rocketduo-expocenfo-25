@@ -9,11 +9,13 @@ Descripción: API REST con dos rutas:
  - POST /evento: recibe eventos del ESP32 (como presionar un botón).
 """
 import json
+import os
 
-from flask import Flask, request, jsonify
-from llm_handler import frase_a_json
-from tts_generator import generar_audio
+from flask import Flask, request, jsonify, send_file, Response
+from service.llm_handler import frase_a_json
+from utils.tts_generator import generar_audio
 from flask_cors import CORS
+
 
 app = Flask(__name__)
 CORS(app) #Permite accesar al puerto 5000/frase desde el puerto de origen 63342
@@ -69,6 +71,23 @@ def procesar_frase():
     generar_audio(datos_json["mensaje"], datos_json["audio_filename"])
 
     return jsonify(datos_json)
+
+
+AUDIO_FILE = "C:/Users/ricar/OneDrive/Escritorio/Arduino/rocketduo-expocenfo-25/aspirina_1800.mp3"
+
+@app.route("/audio", methods=["GET"])
+def serve_audio():
+ 
+    if os.path.exists(AUDIO_FILE):
+        print("Audio encontrado")
+        return send_file(AUDIO_FILE, mimetype="audio/mpeg")
+    else:
+        print("Audio no encontrado")
+        return Response("Audio file not found", status=404)
+    
+print(AUDIO_FILE)
+
+print(os.path.exists("C:/Users/ricar/OneDrive/Escritorio/Arduino/rocketduo-expocenfo-25/aspirina_1800.mp3"))
 
 # Iniciar el servidor
 if __name__ == '__main__':

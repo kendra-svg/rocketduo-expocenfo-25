@@ -1,9 +1,13 @@
 # Avance Preliminar del Proyecto
 
 ## 1. Información del Proyecto
-- **Nombre del Proyecto:** 
-- **Equipo:** Kendra Sancho Vega, Ricardo Valverde Duarte
-- **Roles:** Coordinadora (Kendra), Arquitecto de Hardware (Ricardo).
+- **Nombre del Proyecto:** MediAmigo - Asistente de Medicación.
+- **Equipo:** 
+    - Kendra Sancho Vega
+    - Ricardo Valverde Duarte
+- **Roles:** 
+  - Coordinadora: Kendra
+  - Arquitecto de Hardware: Ricardo.
 
 
 ## 2. Descripción y Justificación

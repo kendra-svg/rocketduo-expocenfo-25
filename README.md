@@ -70,6 +70,10 @@ Envía mensajes SMS si se presionan botones o se detecta voz.
 `config.py` \
 Carga las claves desde .env para que el resto de módulos las usen.
 
+`configuracionEstructura.py`
+
+Devuelve la configuración actual del recordatorio que debe utilizar el dispositivo ESP32 para reproducir el mensaje y activar la alarma.
+
 ## Componentes funcionales del sistema
 
 ### Uso del modelo de lenguaje (LLM)

@@ -8,6 +8,7 @@
    Se usa `flask-cors` para permitir Cross-Origin-Resource-Sharing entre el backend y frontend. \
    Se utiliza `requests` para realizar solicitudes HTTP, por ejemplo, a la API de Azure Cognitive Services para generar audio. \
    Se usa `openai` para enviar prompts y recibir respuestas de modelos como GPT-3.5 de OpenAI. \
+   Se usa `twilio` para el envío de notificaciones a través de SMS en respuesta a eventos del ESP32. \
    Ejecutá el siguiente comando en tu entorno virtual o sistema:
 
    ```bash
@@ -277,7 +278,7 @@ Esta sección detalla cómo preparar el entorno de desarrollo y ejecutar el sist
 2. **Instalar dependencias necesarias**
 
 ```bash
-pip install flask flask-cors python-dotenv openai requests
+pip install flask flask-cors python-dotenv openai requests twilio
 ```
 
 3. **Crear archivo `.env` con las claves de API necesarias**

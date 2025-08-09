@@ -1,19 +1,24 @@
 from dotenv import load_dotenv
 import os
-from config import TWILIO_SID, TWILIO_TOKEN, TWILIO_PHONE_NUMBER, NUMERO_CUIDADOR
+import sys
+
+# Agregar la carpeta raíz del proyecto al sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+from backend.config.config import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, TWILIO_PHONE_NUMBER_TO
 from twilio.rest import Client
-from config import TWILIO_SID, TWILIO_TOKEN, TWILIO_PHONE_NUMBER, NUMERO_CUIDADOR
+
 
 def enviar_sms(texto):
     try:
         # Crear cliente de Twilio con tus credenciales
-        client = Client(TWILIO_SID, TWILIO_TOKEN)
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
         # Crear y enviar el mensaje
         mensaje = client.messages.create(
             body=texto,
             from_=TWILIO_PHONE_NUMBER,
-            to=NUMERO_CUIDADOR
+            to=TWILIO_PHONE_NUMBER_TO
         )
 
         print("Mensaje enviado correctamente. SID:", mensaje.sid)

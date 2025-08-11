@@ -12,9 +12,15 @@ CORS(app) #Permite accesar al puerto 5000/frase desde el puerto de origen 63342
 def procesar_frase():
     datos = request.json
     frase = datos.get("frase")
+    #Para debuggear
+    #print("datos: " + str(datos))
+    #print("frase: " + str(frase))
 
     json_str = frase_a_json(frase)
     datos_json = json.loads(json_str)
+    #Para debuggear
+    #print("json_str" + str(json_str))
+    #print("datos_json" + str(datos_json))
 
     generar_audio(datos_json["mensaje"], datos_json["audio_filename"])
 

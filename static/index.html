@@ -53,7 +53,31 @@
 </head>
 
 <body>
-  <h2>Asistente de Medicación</h2>
+  <h2>MediAmigo - Asistente de Medicación</h2>
+
+  <div
+    style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; line-height: 1.5;">
+    <strong>Cómo registrar la medicación</strong><br>
+    Escriba en una sola frase:
+    <ol style="margin: 8px 0 8px 20px; padding: 0;">
+      <li><strong>Quién</strong> debe tomar la medicina (ej. <em>Mi mamá</em>, <em>Don Carlos</em>).</li>
+      <li><strong>Qué medicamento</strong> y dosis si aplica (ej. <em>aspirina 100 mg</em>).</li>
+      <li><strong>Hora exacta</strong> (ej. <em>a las 8:30 a.m.</em>).</li>
+      <li><strong>Frecuencia</strong> de veces al día <em>o</em> cada cuántas horas (ej. <em>dos veces al día</em>,
+        <em>cada 8 horas</em>).
+      </li>
+      <li><strong>Días específicos</strong> (ej. <em>lunes, miércoles y viernes</em>).</li>
+      <li><strong>Duración del tratamiento</strong> si aplica (ej. <em>durante 4 días</em>).</li>
+    </ol>
+    <strong>Ejemplos:</strong><br>
+    - Mi abuela toma aspirina 100 mg a las 8 a.m., dos veces al día, lunes a viernes.<br>
+    - Don José debe tomar metformina a las 7:15 p.m., una vez al día, solo sábados y domingos.<br>
+    - María debe tomar amoxicilina 500 mg a las 6 a.m., cada 8 horas, todos los días.<br>
+    - Olga debe tomar ibuprofeno 600 mg a las 8 a.m., cada 12 horas, durante 4 días.<br>
+    <br>
+    <em>Use siempre a.m./p.m. y el nombre del medicamento en palabras completas.</em>
+  </div>
+
   <div id="chat"></div>
   <input type="text" id="userInput" placeholder="Ej. Mi abuela toma aspirina a las 6 p.m.">
   <button type="button" onclick="sendMessage()">Enviar</button>

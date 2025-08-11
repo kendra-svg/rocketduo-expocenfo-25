@@ -1,27 +1,65 @@
-from openai import OpenAI
 from config.config import OPENAI_API_KEY
+from openai import OpenAI
 
 client = OpenAI(
     api_key=OPENAI_API_KEY
 )
 
 PROMPT_INICIAL = """
-Actuá como un sistema que convierte frases en lenguaje natural en recordatorios de medicamentos estructurados. 
-Devolvé la salida en formato JSON con los siguientes campos:
-- hora (formato 24h: HH:MM)
+Actuá como un sistema que convierte frases en lenguaje natural en recordatorios de medicamentos estructurados.
+Devuelve siempre la salida en formato JSON con los siguientes campos:
+- quien: nombre o descripción de la persona que debe tomar el medicamento (en el mismo formato que aparece en el texto).
+- hora (formato 24h: "HH:MM")
 - medicamento (nombre corto, en minúscula)
-- mensaje (texto personalizado para el adulto mayor)
-- audio_filename (nombre del archivo .mp3 sugerido, sin espacios)
+- mensaje (texto personalizado para el adulto mayor, usando la hora en palabras y el nombre del medicamento)
+- audio_filename (nombre del archivo .mp3 sugerido, en minúsculas, sin espacios, con el formato medicamento_hhmm.mp3)
+- frecuencia (texto tal como lo indica el usuario, ej. "dos veces al día", "cada 8 horas")
+- dias (lista en minúscula de los días en que debe tomarse, ej. ["lunes","miércoles","viernes"], o ["todos"] si es diario)
+- duracion_dias (número entero: si el usuario indica “durante X días” usa ese número; si no hay duración, poner 0)
+- fecha_inicio (fecha "YYYY-MM-DD" calculada según las reglas siguientes)
+- fecha_fin (fecha "YYYY-MM-DD" si hay duracion_dias > 0, o 0 si es permanente)
 
-Ejemplo de entrada:
-'Mi abuela toma aspirina a las 6 p.m.'
+Reglas para calcular fecha_inicio y fecha_fin:
 
-Ejemplo de salida JSON:
+- Usa la fecha actual del momento en que se procesa.
+- Si la hora indicada todavía no ha pasado hoy y hoy está en la lista de dias, fecha_inicio es hoy.
+- Si la hora indicada todavía no ha pasado hoy pero hoy no está en dias, busca el próximo día válido en la lista.
+- Si la hora indicada ya pasó hoy, busca el siguiente día válido en la lista (puede ser mañana u otro según dias).
+- Si duracion_dias > 0, fecha_fin es fecha_inicio + duracion_dias - 1 días.
+- Si duracion_dias = 0, significa tratamiento permanente y fecha_fin será 0.
+
+Ejemplos de entrada y salida:
+
+Entrada:
+"Mi abuela toma aspirina 100 mg a las 8 a.m., dos veces al día, lunes a viernes."
+Salida:
+
 {
-  "hora": "18:00",
+  "hora": "08:00",
   "medicamento": "aspirina",
-  "mensaje": "Abuela, son las seis. Hora de tomar aspirina.",
-  "audio_filename": "aspirina_1800.mp3"
+  "mensaje": "Abuela, son las ocho. Hora de tomar aspirina.",
+  "audio_filename": "aspirina_0800.mp3",
+  "frecuencia": "dos veces al día",
+  "dias": ["lunes","martes","miércoles","jueves","viernes"],
+  "duracion_dias": 0,
+  "fecha_inicio": "2025-08-11",
+  "fecha_fin": 0
+}
+
+Entrada:
+"Olga debe tomar ibuprofeno 500 mg a las 8 a.m., cada 12 horas, durante 4 días."
+Salida:
+
+{
+  "hora": "08:00",
+  "medicamento": "ibuprofeno",
+  "mensaje": "Olga, son las ocho. Hora de tomar ibuprofeno.",
+  "audio_filename": "ibuprofeno_0800.mp3",
+  "frecuencia": "cada 12 horas",
+  "dias": ["todos"],
+  "duracion_dias": 4,
+  "fecha_inicio": "2025-08-11",
+  "fecha_fin": "2025-08-14"
 }
 """
 

@@ -12,12 +12,10 @@ Devuelve siempre la salida en formato JSON con los siguientes campos:
 - hora (formato 24h: "HH:MM")
 - medicamento (nombre corto, en minúscula)
 - mensaje (texto personalizado para el adulto mayor, usando la hora en palabras y el nombre del medicamento)
-- audio_filename (nombre del archivo .mp3 sugerido, en minúsculas, sin espacios, con el formato medicamento_hhmm.mp3)
+- audio_filename (nombre del archivo .wav sugerido, en minúsculas, sin espacios, con el formato medicamento_hhmm.mp3)
 - frecuencia (texto tal como lo indica el usuario, ej. "dos veces al día", "cada 8 horas")
 - dias (lista en minúscula de los días en que debe tomarse, ej. ["lunes","miércoles","viernes"], o ["todos"] si es diario)
 - duracion_dias (número entero: si el usuario indica “durante X días” usa ese número; si no hay duración, poner 0)
-- fecha_inicio (fecha "YYYY-MM-DD" calculada según las reglas siguientes)
-- fecha_fin (fecha "YYYY-MM-DD" si hay duracion_dias > 0, o 0 si es permanente)
 
 Reglas para calcular fecha_inicio y fecha_fin:
 
@@ -35,15 +33,14 @@ Entrada:
 Salida:
 
 {
+  "quien": "abuela",
   "hora": "08:00",
   "medicamento": "aspirina",
   "mensaje": "Abuela, son las ocho. Hora de tomar aspirina.",
-  "audio_filename": "aspirina_0800.mp3",
+  "audio_filename": "aspirina_0800.wav",
   "frecuencia": "dos veces al día",
   "dias": ["lunes","martes","miércoles","jueves","viernes"],
-  "duracion_dias": 0,
-  "fecha_inicio": "2025-08-11",
-  "fecha_fin": 0
+  "duracion_dias": 0
 }
 
 Entrada:
@@ -51,15 +48,14 @@ Entrada:
 Salida:
 
 {
+  "quien": "Olga",
   "hora": "08:00",
   "medicamento": "ibuprofeno",
   "mensaje": "Olga, son las ocho. Hora de tomar ibuprofeno.",
-  "audio_filename": "ibuprofeno_0800.mp3",
+  "audio_filename": "ibuprofeno_0800.wav",
   "frecuencia": "cada 12 horas",
   "dias": ["todos"],
-  "duracion_dias": 4,
-  "fecha_inicio": "2025-08-11",
-  "fecha_fin": "2025-08-14"
+  "duracion_dias": 4
 }
 """
 

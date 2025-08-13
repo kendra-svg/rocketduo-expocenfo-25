@@ -67,10 +67,13 @@ Define las rutas y coordina los módulos auxiliares.
 Comunica con OpenAI para transformar frases en JSON.
 
 `tts_generator.py` \
-Convierte el mensaje del JSON en un archivo .mp3 con Azure.
+Convierte el mensaje del JSON en un archivo .wav con Azure.
+
+`date_calculator.py` \
+Calcula la fecha de los recordatorios en base a la información extraída por el modelo.
 
 `twilio_handler.py` \
-Envía mensajes SMS si se presionan botones o se detecta voz.
+Envía mensajes SMS si se presionan botones.
 
 `config.py` \
 Carga las claves desde .env para que el resto de módulos las usen.
@@ -82,7 +85,7 @@ Carga las claves desde .env para que el resto de módulos las usen.
   - hora (`HH:MM`)
   - medicamento
   - mensaje para la persona adulta mayor
-  - nombre del archivo `.mp3` generado
+  - nombre del archivo `.wav` generado
 
 - Ejemplo de entrada:
   > Mi abuela toma aspirina a las 6 p.m.
@@ -90,10 +93,14 @@ Carga las claves desde .env para que el resto de módulos las usen.
 - Ejemplo de salida:
 ```json
 {
+  "quien": "abuela",
   "hora": "18:00",
   "medicamento": "aspirina",
   "mensaje": "Abuela, son las seis. Hora de tomar aspirina.",
-  "audio_filename": "aspirina_1800.mp3"
+  "audio_filename": "aspirina_1800.wav",
+  "frecuencia": "una vez al día",
+  "dias": ["todos"],
+  "duracion_dias": 0
 }
 ```
 
@@ -101,12 +108,13 @@ Carga las claves desde .env para que el resto de módulos las usen.
 ## Text-to-Speech con Azure
 
 - Se usa `es-CR-MariaNeural` como voz en español femenina.
-- Formato de salida: `audio-48khz-192kbitrate-mono-mp3`
+- Formato de salida: `riff-16khz-16bit-mono-pcm`
 - El archivo se guarda con el nombre especificado en el JSON.
 
 
 ## Interfaz de Usuario (HTML)
 
+- Se muestran instrucciones de uso al usuario
 - Entrada: campo de texto para frase en lenguaje natural.
 - Envío: se realiza a través de `fetch('/frase')`.
 - Respuesta:
@@ -136,14 +144,19 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 
 3. **Procesamiento con LLM (OpenAI)**  
    El backend utiliza el módulo `llm_handler.py` para enviar la frase al modelo `gpt-3.5-turbo`, que genera un objeto JSON estructurado con los siguientes datos:
+   - quien 
    - hora
    - medicamento
    - mensaje personalizado
    - nombre del archivo de audio a generar
+   - frecuencia ej. dos veces al día, cada 8 horas
+   - dias (lista en minúscula de los días en que debe tomarse, ej. ["lunes","miércoles","viernes"], o ["todos"] si es diario)
+   - duracion en dias (número entero: si el usuario indica “durante X días” se usa ese número; si no hay duración, se usa 0)
+
 
 
 4. **Generación de audio con Azure TTS**  
-   El texto del mensaje es enviado al servicio de Text-to-Speech de Azure mediante el módulo `tts_generator.py`, y se genera un archivo `.mp3`.
+   El texto del mensaje es enviado al servicio de Text-to-Speech de Azure mediante el módulo `tts_generator.py`, y se genera un archivo `.wav`.
 
 
 5. **Respuesta al usuario**  
@@ -184,7 +197,7 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 
   - Cada botón genera un evento que se reporta al backend vía `/evento` y se envía un SMS al cuidador.
 
-- **Tira de LED RGB (por ejemplo, WS2812B o similar)**
+- **LED**
   - Se enciende con colores según el evento o recordatorio.
   - Ayuda a captar visualmente la atención de la persona al momento del recordatorio.
 
@@ -192,7 +205,7 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 
 - **Dispositivo Bluetooth emparejado**
   - El ESP32 se conecta vía Bluetooth a un altavoz inalámbrico o parlante inteligente.
-  - Los audios previamente generados (.mp3) se transmiten desde el ESP32 al dispositivo Bluetooth cuando llega la hora programada.
+  - Los audios previamente generados (.wav) se transmiten desde el ESP32 al dispositivo Bluetooth cuando llega la hora programada.
   - Esto evita la necesidad de almacenamiento local en tarjetas SD.
 
 ## Fuente de poder

@@ -1,6 +1,8 @@
-import requests
 import os
+
+import requests
 from config.config import AZURE_SPEECH_KEY
+
 
 def generar_audio(texto, nombre_archivo):
     region = "eastus2"
@@ -10,7 +12,7 @@ def generar_audio(texto, nombre_archivo):
     headers = {
         "Ocp-Apim-Subscription-Key": AZURE_SPEECH_KEY,
         "Content-Type": "application/ssml+xml",
-        "X-Microsoft-OutputFormat": "audio-48khz-192kbitrate-mono-mp3" #representa un archivo de tipo mp3
+        "X-Microsoft-OutputFormat": "riff-16khz-16bit-mono-pcm" #representa un archivo de tipo mp3
     }
 
     #Si el texto está vacío, se cancela la generacion del archivo
@@ -36,8 +38,8 @@ def generar_audio(texto, nombre_archivo):
     if response.status_code == 200:
         content_type = response.headers.get("Content-Type", "")
         if content_type.startswith("audio/"):
-            nombre_archivo_final = nombre_archivo if nombre_archivo.endswith(".mp3") else nombre_archivo + ".mp3"
-            with open(nombre_archivo, "wb") as audio_file:
+            nombre_archivo_final = nombre_archivo if nombre_archivo.endswith(".wav") else nombre_archivo + ".wav"
+            with open(nombre_archivo_final, "wb") as audio_file:
                 audio_file.write(response.content)
                 print("Audio generado correctamente")
             return True

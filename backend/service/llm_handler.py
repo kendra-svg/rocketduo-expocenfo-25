@@ -33,6 +33,7 @@ Entrada:
 Salida:
 
 {
+  "quien": "abuela",
   "hora": "08:00",
   "medicamento": "aspirina",
   "mensaje": "Abuela, son las ocho. Hora de tomar aspirina.",
@@ -47,6 +48,7 @@ Entrada:
 Salida:
 
 {
+  "quien": "Olga",
   "hora": "08:00",
   "medicamento": "ibuprofeno",
   "mensaje": "Olga, son las ocho. Hora de tomar ibuprofeno.",

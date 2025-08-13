@@ -12,7 +12,7 @@ def generar_audio(texto, nombre_archivo):
     headers = {
         "Ocp-Apim-Subscription-Key": AZURE_SPEECH_KEY,
         "Content-Type": "application/ssml+xml",
-        "X-Microsoft-OutputFormat": "riff-16khz-16bit-mono-pcm" #representa un archivo de tipo mp3
+        "X-Microsoft-OutputFormat": "riff-16khz-16bit-mono-pcm" #representa un archivo de tipo wav
     }
 
     #Si el texto está vacío, se cancela la generacion del archivo

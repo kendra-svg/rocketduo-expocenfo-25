@@ -9,7 +9,8 @@
    Se utiliza `requests` para realizar solicitudes HTTP, por ejemplo, a la API de Azure Cognitive Services para generar audio. \
    Se usa `openai` para enviar prompts y recibir respuestas de modelos como GPT-3.5 de OpenAI. \
    Se usa `twilio` para el envío de notificaciones a través de SMS en respuesta a eventos del ESP32. \
-   Se usa `azure-storage-blob` para el almacenamiento de los audios en Azure
+   Se usa `azure-storage-blob` para la generación de un URL publico para consultar los audios en Azure.
+   Se usa `azure-cosmos` para el almacenamiento del JSON en la base de datos en Azure.
    Ejecutá el siguiente comando en tu entorno virtual o sistema:
 
    ```bash
@@ -68,10 +69,13 @@ Define las rutas y coordina los módulos auxiliares.
 Comunica con OpenAI para transformar frases en JSON.
 
 `tts_generator.py` \
-Convierte el mensaje del JSON en un archivo .wav con Azure.
+Convierte el mensaje del JSON en un archivo .wav con Azure Text-To-Speech.
 
 `date_calculator.py` \
 Calcula la fecha de los recordatorios en base a la información extraída por el modelo.
+
+`audio_exporter.py`
+Sube los audios generados localmente a un url en Azure Blob Storage.
 
 `twilio_handler.py` \
 Envía mensajes SMS si se presionan botones.
@@ -159,16 +163,18 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 4. **Generación de audio con Azure TTS**  
    El texto del mensaje es enviado al servicio de Text-to-Speech de Azure mediante el módulo `tts_generator.py`, y se genera un archivo `.wav`.
 
+5. **Envío de audio a Azure Blob Storage**
+   El audio generado localmente es enviado al Azure Blob Storage para la generación de un URL que va a ser consultado por el ESP32.
 
-5. **Respuesta al usuario**  
+6. **Respuesta al usuario**  
    La interfaz muestra un resumen de la configuración exitosa, incluyendo el mensaje, hora, medicamento y nombre del audio generado.
 
 
-6. **Disponibilidad para el ESP32**  
+7. **Disponibilidad para el ESP32**  
    La configuración generada queda disponible para ser consultada por el ESP32 a través del endpoint `/configuracion`. El ESP32 descargará los eventos programados, reproducirá el audio a la hora indicada y encenderá luces LED como parte del recordatorio.
 
 
-7. **Botones de emergencia** *(extra)*  
+8. **Botones de emergencia** *(extra)*  
    Si se presiona alguno de los botones físicos (rojo, azul o amarillo), el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
 
 
@@ -292,7 +298,7 @@ Esta sección detalla cómo preparar el entorno de desarrollo y ejecutar el sist
 2. **Instalar dependencias necesarias**
 
 ```bash
-pip install flask flask-cors python-dotenv openai requests twilio azure-storage-blob
+pip install flask flask-cors python-dotenv openai requests twilio azure-storage-blob azure-cosmos
 ```
 
 3. **Crear archivo `.env` con las claves de API necesarias**

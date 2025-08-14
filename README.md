@@ -9,12 +9,12 @@
    Se utiliza `requests` para realizar solicitudes HTTP, por ejemplo, a la API de Azure Cognitive Services para generar audio. \
    Se usa `openai` para enviar prompts y recibir respuestas de modelos como GPT-3.5 de OpenAI. \
    Se usa `twilio` para el envío de notificaciones a través de SMS en respuesta a eventos del ESP32. \
-   Se usa `azure-storage-blob` para la generación de un URL publico para consultar los audios en Azure.
-   Se usa `azure-cosmos` para el almacenamiento del JSON en la base de datos en Azure.
+   Se usa `azure-storage-blob` para la generación de un URL publico para consultar los audios en Azure. \
+   Se usa `azure-cosmos` para el almacenamiento del JSON en la base de datos en Azure. \
    Ejecutá el siguiente comando en tu entorno virtual o sistema:
 
    ```bash
-   pip install python-dotenv flask flask-cors requests openai
+   pip install python-dotenv flask flask-cors requests openai twilio azure-storage-blob azure-cosmos
 
 2. **Crear archivo de configuración de entorno (.env)** \
 Este archivo se utiliza para definir claves privadas como tokens de API.
@@ -50,6 +50,10 @@ rocketduo-expocenfo-25/
 │        └── twilio_handler.py   # Envío de SMS con Twilio
 │   └── utils
 │        └── tts_generator.py    # Conversión de texto a audio con Azure
+│        └── cosmos_service.py   # Conexión con Azure Cosmos DB
+│        └── date_calculator.py  # Cálculo de fechas del tratamiento  
+│        └── audio_exporter.py   # Envío de audio generado localmente a Azure Blob Storage
+│ 
 │   └── main.py                  # Punto de entrada del programa
 ├── esp32/audio
 │   └── audio.ino          # Reproduccion de recordatorios via Bluetooth
@@ -74,7 +78,7 @@ Convierte el mensaje del JSON en un archivo .wav con Azure Text-To-Speech.
 `date_calculator.py` \
 Calcula la fecha de los recordatorios en base a la información extraída por el modelo.
 
-`audio_exporter.py`
+`audio_exporter.py` \
 Sube los audios generados localmente a un url en Azure Blob Storage.
 
 `twilio_handler.py` \
@@ -87,10 +91,14 @@ Carga las claves desde .env para que el resto de módulos las usen.
 
 ## Uso del modelo de lenguaje (LLM)
 - Se utiliza `gpt-3.5-turbo` con un prompt diseñado para extraer:
+  - quien
   - hora (`HH:MM`)
   - medicamento
   - mensaje para la persona adulta mayor
   - nombre del archivo `.wav` generado
+  - frecuencia
+  - dias que debe tomarse
+  - duracion del tratamiento
 
 - Ejemplo de entrada:
   > Mi abuela toma aspirina a las 6 p.m.
@@ -155,9 +163,8 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
    - mensaje personalizado
    - nombre del archivo de audio a generar
    - frecuencia ej. dos veces al día, cada 8 horas
-   - dias (lista en minúscula de los días en que debe tomarse, ej. ["lunes","miércoles","viernes"], o ["todos"] si es diario)
-   - duracion en dias (número entero: si el usuario indica “durante X días” se usa ese número; si no hay duración, se usa 0)
-
+   - dias en que debe tomarse
+   - duracion del tratamiento
 
 
 4. **Generación de audio con Azure TTS**  

@@ -4,6 +4,7 @@ import os
 from flask import Flask, Response, jsonify, request, send_file
 from flask_cors import CORS
 from service.llm_handler import frase_a_json
+from utils.audio_exporter import subir_a_blob
 from utils.date_calculator import calcular_fechas
 from utils.tts_generator import generar_audio
 
@@ -22,8 +23,13 @@ def procesar_frase():
     json_str = frase_a_json(frase)
     datos_json = json.loads(json_str)
 
-    #Generar audio enviando mensaje y nombre del archivo a Azure Text-To-Speech con tts_generator
+    #Generar audio localmente con Azure Text-To-Speech usando tts_generator
+    archivo_wav = datos_json["audio_filename"]
     generar_audio(datos_json["mensaje"], datos_json["audio_filename"])
+
+    #Subir wav a Azure blob storage
+    url_audio = subir_a_blob(archivo_wav, archivo_wav)
+    datos_json["audio_url"] = url_audio  # agregar la URL al JSON
 
     #Calcular fechas de los recordatorios con date_calculator
     fecha_inicio, fecha_fin = calcular_fechas(

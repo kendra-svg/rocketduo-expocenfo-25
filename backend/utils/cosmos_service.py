@@ -1,5 +1,5 @@
 from azure.cosmos import CosmosClient, exceptions
-from backend.config.config import (
+from config.config import (
     AZURE_COSMOS_DATABASE_NAME,
     AZURE_COSMOS_DB_CONTAINER_NAME,
     AZURE_COSMOS_KEY,

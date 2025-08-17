@@ -4,10 +4,14 @@
 - **Nombre del Proyecto:** MediAmigo - Asistente de Medicación.
 - **Equipo:** 
     - Kendra Sancho Vega
-    - Ricardo Valverde Duarte
+    - Josias Hidalgo
+    - Gabriel Porras
+    - Jeremy Villegas
 - **Roles:** 
-  - Coordinadora: Kendra
-  - Arquitecto de Hardware: Ricardo.
+  - Coordinadora y desarrolladora: Kendra Sancho Vega.
+  - Arquitecto de Hardware: Josias Hidalgo.
+  - Desarrollador: Gabriel Porras.
+  - Desarrollador: Jeremy Villegas.
 
 
 ## 2. Descripción y Justificación
@@ -29,13 +33,13 @@
 
   - Procesar dichas frases mediante un modelo LLM (GPT) para obtener información estructurada.
 
-  - Generar un archivo de audio (.mp3) con voz natural usando Azure Text-to-Speech.
+  - Generar un archivo de audio (.wav) con voz natural usando Azure Text-to-Speech.
 
   - Servir esta configuración en formato JSON para su lectura por el ESP32.
 
   - Reproducir el audio en el ESP32 en la hora indicada a través de conexión Bluetooth.
 
-  - Enviar alertas opcionales vía SMS mediante Twilio en caso de interacción del usuario.
+  - Enviar alertas vía SMS mediante Twilio en caso de interacción del usuario.
 
 ## 4. Requisitos Iniciales
 - Lista breve de lo que el sistema debe lograr:  

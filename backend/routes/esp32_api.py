@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from utils.cosmos_service import cosmos_service
+from backend.service.cosmos_handler import cosmos_handler
 
 router = Blueprint("esp32_api", __name__, url_prefix="/api/esp32")
 
@@ -29,7 +29,7 @@ def siguiente_audio():
         return jsonify({"detalle": "Faltan parametros 'quien' y/o 'hora'"}), 400
 
     # Trae solo la partición de esa persona (rápido)
-    recordatorios = cosmos_service.obtener_recordatorios_por_persona(quien)
+    recordatorios = cosmos_handler.obtener_recordatorios_por_persona(quien)
 
     # Coincidencia exacta por hora y activos
     candidatos = [
@@ -81,7 +81,7 @@ def agenda():
     hoy_str = now_cr.strftime("%Y-%m-%d")
     hhmm_now = now_cr.strftime("%H:%M")
 
-    recordatorios = cosmos_service.obtener_recordatorios_por_persona(quien)
+    recordatorios = cosmos_handler.obtener_recordatorios_por_persona(quien)
 
     def aplica_hoy(rec) -> bool:
         """

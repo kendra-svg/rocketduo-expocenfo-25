@@ -11,12 +11,13 @@
    Se usa `twilio` para el envío de notificaciones a través de SMS en respuesta a eventos del ESP32. \
    Se usa `azure-storage-blob` para la generación de un URL publico para consultar los audios en Azure. \
    Se usa `azure-cosmos` para el almacenamiento del JSON en la base de datos en Azure. \
+   
    Ejecutá el siguiente comando en tu entorno virtual o sistema:
 
    ```bash
    pip install python-dotenv flask flask-cors requests openai twilio azure-storage-blob azure-cosmos
 
-2. **Crear archivo de configuración de entorno (.env)** \
+3. **Crear archivo de configuración de entorno (.env)** \
 Este archivo se utiliza para definir claves privadas como tokens de API.
 Por ejemplo:
 
@@ -24,7 +25,7 @@ Por ejemplo:
    OPENAI_API_KEY=clave_de_openai_aqui
    TWILIO_AUTH_TOKEN=token_de_twilio
 
-3. **Crear archivo config.py para cargar las variables**
+4. **Crear archivo config.py para cargar las variables**
 Este archivo lee las claves del archivo .env y las expone como constantes reutilizables en todo el proyecto:
 
    ```bash
@@ -35,7 +36,7 @@ Este archivo lee las claves del archivo .env y las expone como constantes reutil
 
    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-  4. **Proteger información sensible** \
+  5. **Proteger información sensible** \
   El archivo .env ha sido agregado al archivo .gitignore para evitar que las claves se suban al repositorio público.
 
 # Estructura del Proyecto
@@ -48,9 +49,9 @@ rocketduo-expocenfo-25/
 │   └── service
 │        └── llm_handler.py      # Comunicación con OpenAI (LLM)
 │        └── twilio_handler.py   # Envío de SMS con Twilio
+│        └── cosmos_handler.py   # Conexión con Azure Cosmos DB
 │   └── utils
 │        └── tts_generator.py    # Conversión de texto a audio con Azure
-│        └── cosmos_service.py   # Conexión con Azure Cosmos DB
 │        └── date_calculator.py  # Cálculo de fechas del tratamiento  
 │        └── audio_exporter.py   # Envío de audio generado localmente a Azure Blob Storage
 │ 
@@ -67,22 +68,25 @@ rocketduo-expocenfo-25/
 
 # Descripción de los módulos
 `main.py` \
-Define las rutas y coordina los módulos auxiliares.
+Punto de entrada del programa.
 
 `llm_handler.py` \
 Comunica con OpenAI para transformar frases en JSON.
 
+`twilio_handler.py` \
+Envía mensajes SMS si se presionan botones en el ESP32.
+
 `tts_generator.py` \
 Convierte el mensaje del JSON en un archivo .wav con Azure Text-To-Speech.
+
+`cosmos_handler.py` \
+Conexión con Azure Cosmos DB para almacenamiento de JSON.
 
 `date_calculator.py` \
 Calcula la fecha de los recordatorios en base a la información extraída por el modelo.
 
 `audio_exporter.py` \
 Sube los audios generados localmente a un url en Azure Blob Storage.
-
-`twilio_handler.py` \
-Envía mensajes SMS si se presionan botones.
 
 `config.py` \
 Carga las claves desde .env para que el resto de módulos las usen.
@@ -340,7 +344,7 @@ El servidor estará disponible por defecto en [http://localhost:5000](http://loc
 Mi abuela toma aspirina a las 6 p.m.
 ```
 
-3. Se generará el archivo `.mp3` con el mensaje personalizado y se mostrará el resumen de configuración.
+3. Se generará el archivo `.wav` con el mensaje personalizado y se mostrará el resumen de configuración.
 
 ## Preparar el ESP32
 
@@ -364,7 +368,7 @@ Una vez conectado a Wi-Fi, el ESP32 debería poder consumir el endpoint `/config
 # Recomendaciones de Uso
 - **Conexión Wi-Fi:** asegurarse de que el ESP32 esté en la misma red que el backend durante las pruebas.
 
-- **Audios generados:** los archivos .mp3 generados deben estar accesibles para el ESP32 (ya sea descargados o pregrabados).
+- **Audios generados:** los archivos .wav generados deben estar accesibles para el ESP32 (ya sea descargados o pregrabados).
 
 - **Mensajes SMS:** el número de teléfono del cuidador debe estar configurado en el backend (en twilio_handler.py).
 

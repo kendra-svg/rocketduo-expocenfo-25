@@ -47,21 +47,24 @@ rocketduo-expocenfo-25/
 │   └── config
 │        └── config.py           # Carga de variables desde .env
 │   └── service
+│        └── cosmos_handler.py   # Conexión con Azure Cosmos DB
 │        └── llm_handler.py      # Comunicación con OpenAI (LLM)
 │        └── twilio_handler.py   # Envío de SMS con Twilio
-│        └── cosmos_handler.py   # Conexión con Azure Cosmos DB
 │   └── utils
-│        └── tts_generator.py    # Conversión de texto a audio con Azure
-│        └── date_calculator.py  # Cálculo de fechas del tratamiento  
 │        └── audio_exporter.py   # Envío de audio generado localmente a Azure Blob Storage
+│        └── date_calculator.py  # Cálculo de fechas del tratamiento
+│        └── tts_generator.py    # Conversión de texto a audio con Azure  
 │ 
 │   └── main.py                  # Punto de entrada del programa
 ├── esp32/audio
 │   └── audio.ino          # Reproduccion de recordatorios via Bluetooth
 ├── node_modules
 │   └── config.js          # Módulos que permiten el funcionamiento del programa.
-├── static/                # HTML y JS del frontend
-│   └── index.html
+│
+├── static/               
+│   └── index.html         # Interfaz web
+│   └── index.css          # Estilos de interfaz web
+│
 ├── .env                   # Variables de entorno (ignorado por Git)
 └── .gitignore             # Archivos que no se subirán al repositorio
 ```
@@ -185,7 +188,7 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
    La configuración generada queda disponible para ser consultada por el ESP32 a través del endpoint `/configuracion`. El ESP32 descargará los eventos programados, reproducirá el audio a la hora indicada y encenderá luces LED como parte del recordatorio.
 
 
-8. **Botones de emergencia** *(extra)*  
+8. **Botones de emergencia** 
    Si se presiona alguno de los botones físicos (rojo, azul o amarillo), el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
 
 

@@ -9,7 +9,7 @@ import uuid
 from datetime import datetime
 
 
-class CosmosService:
+class cosmos_handler:
     def __init__(self):
         self.client = CosmosClient(AZURE_COSMOS_URL, AZURE_COSMOS_KEY)
         self.database = self.client.get_database_client(AZURE_COSMOS_DATABASE_NAME)
@@ -185,4 +185,4 @@ class CosmosService:
 
 
 # Instancia global para usar en toda la aplicación
-cosmos_service = CosmosService()
+cosmos_handler = cosmos_handler()

@@ -143,12 +143,6 @@ Carga las claves desde .env para que el resto de módulos las usen.
 - Diseño responsive, simple y accesible.
 
 
-# Rutas API disponibles
-
-| Método | Ruta             | Descripción                                         |
-|--------|------------------|-----------------------------------------------------|
-| POST   | `/frase`         | Recibe frase y devuelve JSON + genera audio        |
-
 
 # Flujo general del sistema
 
@@ -189,21 +183,12 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 
 
 8. **Botones de emergencia** 
-   Si se presiona alguno de los botones físicos (rojo, azul o amarillo), el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
+   Si se presiona alguno de los botones físicos, el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
 
 
 # Componentes ESP32
 
 Este sistema de asistencia incluye un conjunto de componentes físicos conectados al microcontrolador ESP32. A continuación se detallan los principales elementos involucrados:
-
-
-## Fuente de poder
-
-- **Alimentación USB-C o batería LiPo**
-  - Requiere una fuente de 5V con al menos 1A de salida estable.
-  - Alternativamente puede conectarse a una batería para uso portátil.
-
-
 
 # Conexiones y componentes del Circuito
 
@@ -245,6 +230,9 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 
   - **330 Ω:** Limitadores de corriente para LEDs.
   - **10 kΩ:** Resistencias pull-down para botones y divisor de voltaje del termistor.
+
+## Fuente de poder
+  - **Power bank:** ESP32 se alimenta desde este tipo de batería
 
 #  Instalación y Configuración del Sistema
 
@@ -311,10 +299,6 @@ Mi abuela toma aspirina a las 6 p.m.
 3. Instalá la biblioteca `WiFi.h` si no está incluida.
 4. Usá el monitor serial para ver la salida.
 5. Cargá un sketch con conexión a Wi-Fi y solicitud al endpoint `/configuracion`.
-
-## Verificación
-
-Una vez conectado a Wi-Fi, el ESP32 debería poder consumir el endpoint `/configuracion` y mostrar en el monitor serial la configuración recibida.
 
 ##
 

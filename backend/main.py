@@ -1,15 +1,14 @@
 import json
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-
 # Rutas de negocio
 from routes.clothing_api import router as clothing_router
 from routes.scheduler_api import scheduler_bp
-# Service del scheduler para inicializarlo (no para rutear)
-from service.scheduler_service import init_scheduler, CONFIG
-
 # Otros handlers ya existentes
 from service.llm_handler import frase_a_json
+# Service del scheduler para inicializarlo (no para rutear)
+from service.scheduler_service import CONFIG, init_scheduler
 from utils.audio_exporter import subir_a_blob
 from utils.date_calculator import calcular_fechas
 from utils.tts_generator import generar_audio
@@ -27,18 +26,26 @@ def procesar_frase():
     datos = request.json or {}
     frase = datos.get("frase")
 
+    #Para debuggear
+    #print("datos: " + str(datos))
+    #print("frase: " + str(frase))
+
     print("datos:", datos)
     print("frase:", frase)
 
+    #Extraer recordatorio con llm_handler
     json_str = frase_a_json(frase)
     datos_json = json.loads(json_str)
 
+    #Generar audio localmente con Azure Text-To-Speech usando tts_generator
     archivo_wav = datos_json["audio_filename"]
     generar_audio(datos_json["mensaje"], archivo_wav)
 
+    #Subir wav a Azure blob storage
     url_audio = subir_a_blob(archivo_wav, archivo_wav)
-    datos_json["audio_url"] = url_audio
+    datos_json["audio_url"] = url_audio # agregar la URL al JSON
 
+    #Calcular fechas de los recordatorios con date_calculator
     fecha_inicio, fecha_fin = calcular_fechas(
         datos_json["hora"],
         datos_json["dias"],
@@ -47,6 +54,7 @@ def procesar_frase():
     datos_json["fecha_inicio"] = fecha_inicio
     datos_json["fecha_fin"] = fecha_fin
 
+    #Para debuggear
     print("json_str:", json_str)
     print("datos_json:", datos_json)
 

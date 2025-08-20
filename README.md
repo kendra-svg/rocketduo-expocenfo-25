@@ -261,15 +261,15 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 ## Imagenes del circuito completo
 **Imagen número 1 del circuito final**
 
-![Imagen número 1 del circuito final](avance\circuito1.jpg)
+![Imagen número 1 del circuito final](avance/circuito1.jpg)
 
 **Imagen número 2 del circuito final**
 
-![Imagen número 2 del circuito final](avance\circuito2.jpg)
+![Imagen número 2 del circuito final](avance/circuito2.jpg)
 
 **Imagen número 3 del circuito final**
 
-![Imagen número 3 del circuito final](avance\circuito3.jpg)
+![Imagen número 3 del circuito final](avance/circuito3.jpg)
 
 #  Instalación y Configuración del Sistema
 

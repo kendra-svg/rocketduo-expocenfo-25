@@ -6,12 +6,12 @@
     - Kendra Sancho Vega
     - Josias Hidalgo
     - Gabriel Porras
-    - Jeremy Villegas
+
 - **Roles:** 
   - Coordinadora y desarrolladora: Kendra Sancho Vega.
-  - Arquitecto de Hardware: Josias Hidalgo.
+  - Arquitecto de Hardware y desarrollador: Josias Hidalgo.
   - Desarrollador: Gabriel Porras.
-  - Desarrollador: Jeremy Villegas.
+
 
 
 ## 2. Descripción y Justificación

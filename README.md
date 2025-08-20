@@ -145,11 +145,20 @@ Carga las claves desde .env para que el resto de módulos las usen.
 ```
 
 
-## Text-to-Speech con Azure
+## Text-to-Speech con Azure para generación local del audio
 
 - Se usa `es-CR-MariaNeural` como voz en español femenina.
 - Formato de salida: `riff-16khz-16bit-mono-pcm`
 - El archivo se guarda con el nombre especificado en el JSON.
+
+## Generación de la url para accesar al audio en la nube con Azure Blob Storage
+
+- Archivo es subido a Blob Storage y este servicio le asigna un url para poder descargar y accesar el audio.
+- Permite accesar al audio desde cualquier parte del mundo a través de la URL
+
+## Almacenamiento de datos en Azure Cosmos DB
+
+- Información de los recordatorios es almacenada en la nube con Azure Cosmos DB.
 
 
 ## Interfaz de Usuario (HTML)
@@ -191,7 +200,7 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 4. **Generación de audio con Azure TTS**  
    El texto del mensaje es enviado al servicio de Text-to-Speech de Azure mediante el módulo `tts_generator.py`, y se genera un archivo `.wav`.
 
-5. **Envío de audio a Azure Blob Storage**
+5. **Envío de audio a Azure Blob Storage**  
    El audio generado localmente es enviado al Azure Blob Storage para la generación de un URL que va a ser consultado por el ESP32.
 
 6. **Respuesta al usuario**  

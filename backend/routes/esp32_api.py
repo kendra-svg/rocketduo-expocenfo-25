@@ -7,6 +7,8 @@ import requests
 from io import BytesIO
 import time, json, hashlib, threading
 from flask import request, jsonify
+from service.twilio_handler import enviar_sms
+
 router = Blueprint("esp32_api", __name__, url_prefix="/api/esp32")
 
 # Inicializar pygame para reproducción de audio
@@ -72,6 +74,58 @@ def _get_cached_config():
             # Si no hay copia previa, no podemos responder
             raise
 
+
+# Agregar este endpoint al archivo esp32_api.py
+
+@router.post("/evento")
+def recibir_estado_botones():
+    """POST /api/esp32/estado - Recibe estado de botones y envía SMS"""
+    try:
+        datos = request.get_json(silent=True) or {}
+
+        # Obtener datos del botón
+        boton = datos.get("boton", "")
+        quien = datos.get("quien", "Adulto Mayor")
+        timestamp = datos.get("timestamp", datetime.now().isoformat())
+
+
+        # Enviar SMS según el botón presionado
+        if boton == "ROJO" or boton == "EMERGENCIA_MEDICA":
+            enviar_sms_boton("EMERGENCIA", quien)
+        elif boton == "AZUL" or boton == "TRISTEZA_SOLEDAD":
+            enviar_sms_boton("TRISTEZA", quien)
+        elif boton == "AMARILLO" or boton == "HAMBRE":
+            enviar_sms_boton("HAMBRE", quien)
+
+        return jsonify({
+            "status": "received",
+            "mensaje": "Estado de botón procesado",
+            "timestamp": datetime.now().isoformat()
+        }), 200
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+def enviar_sms_boton(tipo, quien):
+    """Envía SMS según el tipo de botón"""
+    try:
+
+        if tipo == "EMERGENCIA":
+            mensaje = f"🚨 EMERGENCIA MÉDICA\n{quien} presionó el botón rojo\nVerificar inmediatamente"
+        elif tipo == "TRISTEZA":
+            mensaje = f"💙 ALERTA EMOCIONAL\n{quien} presionó el botón azul\nNecesita compañía"
+        elif tipo == "HAMBRE":
+            mensaje = f"🍽️ SOLICITUD DE COMIDA\n{quien} presionó el botón amarillo\nTiene hambre"
+        else:
+            return
+
+        exito = enviar_sms(mensaje)
+        print(f"📱 SMS enviado: {'✅' if exito else '❌'}")
+
+    except Exception as e:
+        print(f"❌ Error enviando SMS: {e}")
 
 @router.get("/siguiente-audio")
 def siguiente_audio():

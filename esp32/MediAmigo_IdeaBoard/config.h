@@ -31,7 +31,7 @@ const char* SERVER_URL PROGMEM = "http://192.168.50.249:5000/api/esp32"; // ← 
 
 // ===== PINES DEL IDEABOARD =====
 // Basado en el pinout del IdeaBoard
-#define LED_RED_PIN     32    // Pin digital para LED rojo
+#define LED_RED_PIN     35    // Pin digital para LED rojo
 #define LED_GREEN_PIN   5    // Pin digital para LED verde  
 #define LED_BLUE_PIN    23   // Pin digital para LED azul
 #define LED_YELLOW_PIN  18   // Pin digital para LED amarillo

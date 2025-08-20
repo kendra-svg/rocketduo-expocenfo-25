@@ -11,11 +11,12 @@
    Se usa `twilio` para el envío de notificaciones a través de SMS en respuesta a eventos del ESP32. \
    Se usa `azure-storage-blob` para la generación de un URL publico para consultar los audios en Azure. \
    Se usa `azure-cosmos` para el almacenamiento del JSON en la base de datos en Azure. \
+   Se usa `apscheduler` para generar alertas climáticas periódicamente. 
    
    Ejecutá el siguiente comando en tu entorno virtual o sistema:
 
    ```bash
-   pip install python-dotenv flask flask-cors requests openai twilio azure-storage-blob azure-cosmos
+   pip install python-dotenv flask flask-cors requests openai twilio azure-storage-blob azure-cosmos apscheduler
 
 3. **Crear archivo de configuración de entorno (.env)** \
 Este archivo se utiliza para definir claves privadas como tokens de API.
@@ -45,27 +46,46 @@ Este archivo lee las claves del archivo .env y las expone como constantes reutil
 rocketduo-expocenfo-25/
 ├── backend/
 │   └── config
-│        └── config.py           # Carga de variables desde .env
+│        └── config.py          # Carga de variables desde .env
+│   └── routes
+│        └── clothing_api.py    # Endpoints para consultar y ejecutar recordatorios de abrigo
+│        └── esp32_api.py       # Endpoints para consultar y ejecutar eventos del esp32
+│        └── scheduler_api.py   # Endpoints para consultar y ejecutar el scheduler
+│        └── weather_api.py     # Endpoints para consultar la temperatura
 │   └── service
-│        └── cosmos_handler.py   # Conexión con Azure Cosmos DB
-│        └── llm_handler.py      # Comunicación con OpenAI (LLM)
-│        └── twilio_handler.py   # Envío de SMS con Twilio
+│        └── clothing_service.py  # Recordatorios de abrigo en base a temperatura
+│        └── cosmos_handler.py    # Conexión con Azure Cosmos DB
+│        └── llm_handler.py       # Comunicación con OpenAI (LLM)
+│        └── scheduler_service.py # Lógica central del Scheduler
+│        └── twilio_handler.py    # Envío de SMS con Twilio
 │   └── utils
-│        └── audio_exporter.py   # Envío de audio generado localmente a Azure Blob Storage
-│        └── date_calculator.py  # Cálculo de fechas del tratamiento
-│        └── tts_generator.py    # Conversión de texto a audio con Azure  
+│        └── audio_exporter.py    # Envío de audio generado localmente a Azure Blob Storage
+│        └── date_calculator.py   # Cálculo de fechas del tratamiento
+│        └── tts_generator.py     # Conversión de texto a audio con Azure  
 │ 
-│   └── main.py                  # Punto de entrada del programa
-├── esp32/audio
-│   └── audio.ino          # Reproduccion de recordatorios via Bluetooth
+│   └── main.py                   # Punto de entrada del programa
+│   
+├── esp32/MediAmigo_IdeaBoard
+│        └── MediAmigo_IdeaBoard.ino  # Punto de entrada del ESP32
+│        └── audio_player.h           # Enciende LEDs y reproduce audio en servidor
+│        └── button_handler.h         # Envío de mensajes al presionar botones
+│        └── buzzer_controller.h      # Reproducción de sonidos
+│        └── config.h                 # Configuración de pines de ESP32
+│        └── led_controller.h         # Condiguración de LEDs
+│        └── reminder_manager.h       # Manejo de recordatorios
+│        └── server_communication.h   # Comunicación con servidor
+│        └── temperature_sensor.h     # Lógica del sensor de temperatura
+│        └── time_manager.h           # Manejo y consulta del tiempo
+│        └── wifi_manager.h           # Configuración del wifi
 ├── node_modules
-│   └── config.js          # Módulos que permiten el funcionamiento del programa.
+│   └── config.js          # Módulos que permiten el funcionamiento del programa
 │
 ├── static/               
 │   └── index.html         # Interfaz web
 │   └── index.css          # Estilos de interfaz web
 │
 ├── .env                   # Variables de entorno (ignorado por Git)
+├── LICENSE                # Licencia (CC BY-NC-SA 4.0) de MediAmigo
 └── .gitignore             # Archivos que no se subirán al repositorio
 ```
 

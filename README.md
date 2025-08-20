@@ -89,7 +89,7 @@ rocketduo-expocenfo-25/
 └── .gitignore             # Archivos que no se subirán al repositorio
 ```
 
-# Descripción de los módulos
+# Descripción de los principales módulos del Backend
 `main.py` \
 Punto de entrada del programa.
 
@@ -199,11 +199,11 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 
 
 7. **Disponibilidad para el ESP32**  
-   La configuración generada queda disponible para ser consultada por el ESP32 a través del endpoint `/configuracion`. El ESP32 descargará los eventos programados, reproducirá el audio a la hora indicada y encenderá luces LED como parte del recordatorio.
+   La configuración generada queda disponible para ser consultada por el ESP32. El ESP32 descargará los recordatorios programados, se reproducirá el audio a la hora indicada y el ESP32 encenderá luces LED como parte del recordatorio.
 
 
 8. **Botones de emergencia** 
-   Si se presiona alguno de los botones físicos, el ESP32 enviará un evento al backend mediante `/evento`, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
+   Si se presiona alguno de los botones físicos, el ESP32 enviará un evento al backend, y el sistema usará `twilio_handler.py` para enviar un mensaje SMS al cuidador correspondiente.
 
 
 # Componentes ESP32
@@ -213,7 +213,7 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 # Conexiones y componentes del Circuito
 
 ## ESP32 IdeaBoard (CRCibernetica)
-  Microcontrolador principal con Wi-Fi y Bluetooth integrado. Es el “cerebro” del sistema: consulta recordatorios al backend, controla sensores y actuadores, y transmite audio al parlante Bluetooth.
+  Microcontrolador principal con Wi-Fi y Bluetooth integrado. Es el “cerebro” del sistema: consulta recordatorios al backend, controla sensores y actuadores.
 
 ## LEDs externos (Rojo, Verde, Azul, Amarillo)
   Funcionan como indicadores visuales claros y fáciles de entender:
@@ -240,11 +240,6 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 
 ## Buzzer piezoeléctrico
   Proporciona alertas auditivas simples o melodías cortas cuando se activa un recordatorio o botón.\
-  → Funciona como salida inmediata en caso de que no haya conexión Bluetooth.
-
-## Parlante Bluetooth SANKEY SM 304
-  Dispositivo de audio principal. El ESP32 se conecta vía **A2DP** para transmitir audios descargados del backend (Azure Blob Storage), como un teléfono o PC normal.\
-
 
 ## Resistores
 
@@ -253,6 +248,19 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
 
 ## Fuente de poder
   - **Power bank:** ESP32 se alimenta desde este tipo de batería
+
+## Imagenes del circuito completo
+**Imagen número 1 del circuito final**
+
+![Imagen número 1 del circuito final](avance\circuito1.jpg)
+
+**Imagen número 2 del circuito final**
+
+![Imagen número 2 del circuito final](avance\circuito2.jpg)
+
+**Imagen número 3 del circuito final**
+
+![Imagen número 3 del circuito final](avance\circuito3.jpg)
 
 #  Instalación y Configuración del Sistema
 
@@ -275,7 +283,7 @@ Esta sección detalla cómo preparar el entorno de desarrollo y ejecutar el sist
 2. **Instalar dependencias necesarias**
 
 ```bash
-pip install flask flask-cors python-dotenv openai requests twilio azure-storage-blob azure-cosmos
+pip install python-dotenv flask flask-cors requests openai twilio azure-storage-blob azure-cosmos apscheduler
 ```
 
 3. **Crear archivo `.env` con las claves de API necesarias**
@@ -315,10 +323,9 @@ Mi abuela toma aspirina a las 6 p.m.
 ## Preparar el ESP32
 
 1. Abrí el Arduino IDE.
+2. Conectá el ESP32 a la PC.
 2. Seleccioná la placa: **ESP32 Dev Module**
-3. Instalá la biblioteca `WiFi.h` si no está incluida.
-4. Usá el monitor serial para ver la salida.
-5. Cargá un sketch con conexión a Wi-Fi y solicitud al endpoint `/configuracion`.
+3. Cargá los archivos disponibles en la ruta esp32/MediAmigo_IdeaBoard como sketch al ESP32.
 
 ##
 

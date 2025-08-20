@@ -35,7 +35,7 @@
 
   - Servir esta configuración en formato JSON para su lectura por el ESP32.
 
-  - Reproducir el audio en el ESP32 en la hora indicada a través de conexión Bluetooth.
+  - Reproducir el audio en el ESP32 en la hora indicada a través de altavoces.
 
   - Enviar alertas vía SMS mediante Twilio en caso de interacción del usuario.
 

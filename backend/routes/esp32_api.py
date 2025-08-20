@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from backend.service.cosmos_handler import cosmos_handler
+from service.cosmos_handler import cosmos_handler
 
 router = Blueprint("esp32_api", __name__, url_prefix="/api/esp32")
 

@@ -8,10 +8,15 @@ from utils.audio_exporter import subir_a_blob
 from utils.date_calculator import calcular_fechas
 from utils.tts_generator import generar_audio
 #from routes.esp32_api import router as esp32_router
+# from routes.weather_api import router as weather_router
+from routes.clothing_api import router as clothing_router
+
 
 app = Flask(__name__)
 CORS(app) #Permite accesar al puerto 5000/frase desde el puerto de origen 63342
 #app.register_blueprint(esp32_router)
+# app.register_blueprint(weather_router)
+app.register_blueprint(clothing_router)
 @app.route('/frase', methods=['POST']) #Al ser de tipo post, no se puede acceder a /frase desde el navegador
 def procesar_frase():
     datos = request.json

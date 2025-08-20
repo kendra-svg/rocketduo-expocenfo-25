@@ -6,13 +6,11 @@
     - Kendra Sancho Vega
     - Josias Hidalgo
     - Gabriel Porras
-    - Jeremy Villegas
+
 - **Roles:** 
   - Coordinadora y desarrolladora: Kendra Sancho Vega.
   - Arquitecto de Hardware: Josias Hidalgo.
   - Desarrollador: Gabriel Porras.
-  - Desarrollador: Jeremy Villegas.
-
 
 ## 2. Descripción y Justificación
 - **Problema que se aborda:** Las personas adultas mayores, especialmente aquellas que viven solas o tienen condiciones de salud crónicas, suelen olvidar tomar sus medicamentos a tiempo. Esto puede derivar en complicaciones médicas, hospitalizaciones innecesarias o disminución en la efectividad del tratamiento.

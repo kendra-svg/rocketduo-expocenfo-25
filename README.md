@@ -196,38 +196,6 @@ Este sistema permite transformar una frase escrita por el usuario en un recordat
 
 Este sistema de asistencia incluye un conjunto de componentes físicos conectados al microcontrolador ESP32. A continuación se detallan los principales elementos involucrados:
 
-## Microcontrolador
-
-- **ESP32 Dev Module**
-  - Compatible con Wi-Fi y Bluetooth.
-  - Procesamiento eficiente para tareas en tiempo real.
-  - Interfaz UART para comunicación serial con la PC.
-
-##  Sensores
-
-- **Sensor de Temperatura y Humedad DHT11 o DHT22**
-  - Permite medir el ambiente donde se encuentra la persona adulta mayor.
-  - Estos datos pueden ser utilizados para enviar recordatorios como “ponerse un abrigo” o “hidratarse”.
-
-## Actuadores
-
-- **Botones físicos** (tipo push-button)
-  - **Amarillo:** Indica que la persona tiene hambre.
-  - **Azul:** Indica que se siente sola o triste.
-  - **Rojo:** Indica que se siente enferma o necesita ayuda urgente.
-
-  - Cada botón genera un evento que se reporta al backend vía `/evento` y se envía un SMS al cuidador.
-
-- **LED**
-  - Se enciende con colores según el evento o recordatorio.
-  - Ayuda a captar visualmente la atención de la persona al momento del recordatorio.
-
-##  Reproducción de audio
-
-- **Dispositivo Bluetooth emparejado**
-  - El ESP32 se conecta vía Bluetooth a un altavoz inalámbrico o parlante inteligente.
-  - Los audios previamente generados (.wav) se transmiten desde el ESP32 al dispositivo Bluetooth cuando llega la hora programada.
-  - Esto evita la necesidad de almacenamiento local en tarjetas SD.
 
 ## Fuente de poder
 
@@ -235,61 +203,48 @@ Este sistema de asistencia incluye un conjunto de componentes físicos conectado
   - Requiere una fuente de 5V con al menos 1A de salida estable.
   - Alternativamente puede conectarse a una batería para uso portátil.
 
----
 
-Este conjunto de componentes convierte al ESP32 en un asistente físico capaz de reproducir recordatorios personalizados, reaccionar a eventos manuales y mantener contacto constante con el sistema backend.
 
-##
+# Conexiones y componentes del Circuito
 
-# Integración del ESP32 al Sistema
+## ESP32 IdeaBoard (CRCibernetica)
+  Microcontrolador principal con Wi-Fi y Bluetooth integrado. Es el “cerebro” del sistema: consulta recordatorios al backend, controla sensores y actuadores, y transmite audio al parlante Bluetooth.
 
-Esta sección describe cómo el microcontrolador ESP32 se comunica con el backend Flask y ejecuta las tareas programadas, como reproducir audios, encender luces LED y enviar alertas por botón.
+## LEDs externos (Rojo, Verde, Azul, Amarillo)
+  Funcionan como indicadores visuales claros y fáciles de entender:
 
-### Conectividad
+  - **Rojo:** Emergencia médica
+  - **Azul:** Tristeza o soledad
+  - **Amarillo:** Hambre
+  - **Verde:** Estado normal/OK
 
-- El ESP32 se conecta vía **Wi-Fi** a la red local donde se ejecuta el backend Flask.
-- El backend expone rutas accesibles desde la red, como:
-  
-  ```
-  http://<IP_LOCAL_DEL_SERVIDOR>:5000/configuracion
-  ```
-  
-- Estas rutas permiten al ESP32 obtener configuraciones y reportar eventos.
+  → Cada LED está conectado con un **resistor de 330 Ω** para limitar la corriente y proteger tanto al LED como al ESP32.
 
-### Comunicación con el Backend
+## Botones de color negro
+  Capturan eventos directos del usuario:
 
-- Al iniciar o cada cierto intervalo, el ESP32 consulta el endpoint:
+  - **Al presionar uno de ellos, enciende el led rojo:** Indica emergencia médica y envía SMS al cuidador.
+  - **Al presionar uno de ellos, enciende el led Azul:** Indica tristeza/soledad.
+  - **Al presionar uno de ellos, enciende el led Amarillo:** Indica hambre.
 
-  ```
-  GET /configuracion
-  ```
+  → Cada botón utiliza un **resistor de 10 kΩ** como **pull-down** para evitar lecturas falsas cuando no se presiona.
 
-  Para obtener un listado de recordatorios estructurados en formato JSON.
+## Termistor NTC 10 kΩ
+  Sensor de temperatura ambiente. Permite generar recordatorios adaptativos como “hidratarse” o “ponerse un abrigo” en función del clima.\
+  → Conectado en un **divisor de voltaje con una resistencia fija de 10 kΩ** para convertir los cambios de temperatura en valores analógicos legibles por el ESP32.
 
-- El ESP32 procesa la respuesta para:
-  - Programar alarmas internas.
-  - Reproducir audios a la hora indicada (previamente descargados o almacenados).
-  - Encender luces LED como refuerzo visual.
+## Buzzer piezoeléctrico
+  Proporciona alertas auditivas simples o melodías cortas cuando se activa un recordatorio o botón.\
+  → Funciona como salida inmediata en caso de que no haya conexión Bluetooth.
 
-- Si se presiona un botón físico (amarillo, azul o rojo), el ESP32 envía un evento al backend mediante:
+## Parlante Bluetooth SANKEY SM 304
+  Dispositivo de audio principal. El ESP32 se conecta vía **A2DP** para transmitir audios descargados del backend (Azure Blob Storage), como un teléfono o PC normal.\
 
-  ```
-  POST /evento
-  ```
 
-  El backend interpreta el evento y envía una alerta vía SMS utilizando Twilio.
+## Resistores
 
-### Alimentación y Despliegue
-
-- El ESP32 puede alimentarse por:
-  - **USB directo** desde una PC o cargador.
-  - **Batería recargable Li-Ion** si se desea portabilidad.
-
-- El hardware se puede montar en una caja simple que contenga:
-  - El ESP32.
-  - Tres botones de colores.
-  - Una tira LED.
-  - Un pequeño altavoz o módulo de audio.
+  - **330 Ω:** Limitadores de corriente para LEDs.
+  - **10 kΩ:** Resistencias pull-down para botones y divisor de voltaje del termistor.
 
 #  Instalación y Configuración del Sistema
 
@@ -300,7 +255,7 @@ Esta sección detalla cómo preparar el entorno de desarrollo y ejecutar el sist
 - Python 3.8+
 - pip
 - Cuenta en OpenAI
-- Cuenta en Azure Cognitive Services (con un recurso de Speech)
+- Cuenta en Azure para utilización de Audio Services, Azure Blob Storage y Cosmos DB
 - Arduino IDE instalado
 - Placa ESP32 DevKit
 - Conexión a Internet

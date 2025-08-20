@@ -5,6 +5,8 @@ from flask_cors import CORS
 # Rutas de negocio
 from routes.clothing_api import router as clothing_router
 from routes.scheduler_api import scheduler_bp
+from routes.esp32_api import router as esp32_router
+
 # Service del scheduler para inicializarlo (no para rutear)
 from service.scheduler_service import init_scheduler, CONFIG
 
@@ -20,7 +22,7 @@ CORS(app)
 # Blueprints
 app.register_blueprint(clothing_router)
 app.register_blueprint(scheduler_bp)
-
+app.register_blueprint(esp32_router)
 
 @app.route("/frase", methods=["POST"])
 def procesar_frase():
@@ -57,7 +59,7 @@ if __name__ == "__main__":
     # Arranca el scheduler (usa ENV o defaults del service)
     init_scheduler(
         app_debug=app.debug,
-        # overrides opcionales (déjalos comentados para usar defaults/env):
+        # overrides opcionales:
         # every_min=15,
         # persona="Gabriel",
         # promedio=25,
